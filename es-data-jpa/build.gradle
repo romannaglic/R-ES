@@ -1,0 +1,46 @@
+plugins {
+    id "io.micronaut.library" version "${micronautPluginVersion}"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor("io.micronaut.data:micronaut-data-processor")
+    annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
+    annotationProcessor "io.micronaut:micronaut-inject-java"
+    implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
+    implementation("io.micronaut.validation:micronaut-validation")
+    compileOnly "io.micronaut:micronaut-inject-java"
+    implementation("io.micronaut:micronaut-jackson-databind")
+    implementation("com.github.f4b6a3:tsid-creator:5.2.4")
+    implementation "io.micronaut:micronaut-inject-java"
+
+    implementation project(":es-components")
+
+
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation("io.micronaut.sql:micronaut-jdbc-hikari")
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("com.r.es.*")
+    }
+}
+
+
