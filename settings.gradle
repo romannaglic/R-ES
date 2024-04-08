@@ -1,0 +1,6 @@
+rootProject.name = 'r-eventstore'
+include 'es-components'
+include 'es-data-jpa'
+include 'account-demo'
+include 'bank-demo'
+

@@ -1,0 +1,13 @@
+micronaut:
+  application:
+    name: demo
+datasources:
+  default:
+    driver-class-name: org.h2.Driver
+    dialect: H2
+jpa:
+  default:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update

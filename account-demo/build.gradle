@@ -1,0 +1,67 @@
+plugins {
+  id("com.github.johnrengelman.shadow") version "8.1.1"
+  id("io.micronaut.application") version "4.0.3"
+  id("io.micronaut.aot") version "4.0.3"
+}
+
+version = "0.1"
+group = "com.r.es.demo"
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  annotationProcessor("io.micronaut.data:micronaut-data-processor")
+  annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
+  annotationProcessor("io.micronaut:micronaut-inject-java")
+  implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
+  implementation("io.micronaut.serde:micronaut-serde-jackson")
+  implementation("io.micronaut.sql:micronaut-hibernate-jpa")
+  implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+  implementation("io.micronaut:micronaut-jackson-databind")
+  implementation("com.github.f4b6a3:tsid-creator:5.2.4")
+  implementation("io.micronaut:micronaut-inject-java")
+  implementation("org.projectlombok:lombok:1.18.30")
+  implementation project(":es-components")
+  implementation project(":es-data-jpa")
+
+  runtimeOnly("ch.qos.logback:logback-classic")
+  runtimeOnly("org.yaml:snakeyaml")
+  runtimeOnly("org.postgresql:postgresql")
+
+  testImplementation("org.testcontainers:postgresql")
+  testImplementation("org.testcontainers:testcontainers")
+}
+
+application {
+  mainClass.set("com.r.es.demo.Application")
+}
+java {
+  sourceCompatibility = JavaVersion.toVersion("17")
+  targetCompatibility = JavaVersion.toVersion("17")
+}
+
+graalvmNative.toolchainDetection = false
+micronaut {
+  runtime("netty")
+  testRuntime("junit5")
+  processing {
+    incremental(true)
+    annotations("com.r.*")
+  }
+  aot {
+    // Please review carefully the optimizations enabled below
+    // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
+    optimizeServiceLoading = false
+    convertYamlToJava = false
+    precomputeOperations = true
+    cacheEnvironment = true
+    optimizeClassLoading = true
+    deduceEnvironment = true
+    optimizeNetty = true
+  }
+}
+
+
+
