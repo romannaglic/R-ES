@@ -1,5 +1,15 @@
 plugins {
     id "io.micronaut.library" version "${micronautPluginVersion}"
+    id "maven-publish"
+//    id 'signing'
+}
+
+group 'com.axer'
+version '1.0.0'
+
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 repositories {
@@ -14,11 +24,8 @@ dependencies {
     implementation("io.micronaut.validation:micronaut-validation")
     compileOnly "io.micronaut:micronaut-inject-java"
     implementation("io.micronaut:micronaut-jackson-databind")
-    implementation("com.github.f4b6a3:tsid-creator:5.2.4")
+    implementation("com.github.f4b6a3:tsid-creator:5.2.6")
     implementation "io.micronaut:micronaut-inject-java"
-
-    implementation project(":es-components")
-
 
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation("io.micronaut.sql:micronaut-jdbc-hikari")
@@ -30,8 +37,8 @@ test {
 }
 
 java {
-    sourceCompatibility = JavaVersion.toVersion("17")
-    targetCompatibility = JavaVersion.toVersion("17")
+    sourceCompatibility = JavaVersion.toVersion("21")
+    targetCompatibility = JavaVersion.toVersion("21")
 }
 
 micronaut {
@@ -39,7 +46,72 @@ micronaut {
     testRuntime("junit5")
     processing {
         incremental(true)
-        annotations("com.r.es.*")
+        annotations("com.axer.es.*")
+    }
+}
+
+jar {
+    from fileTree('../es-components/build/classes/java/main') {
+        include '**/*.class'
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'es-data-jpa'
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = 'es-data-jpa'
+                description = 'Event Sourcing Library for JPA'
+                url = 'http://www.example.com/library'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'romannaglic'
+                        name = 'Roman Naglic'
+                        email = 'roman.naglic@gmail.com'
+                    }
+                }
+                scm {
+                    //connection = 'scm:git:git://example.com/my-library.git'
+                    developerConnection = 'scm:git:git@github.com:romannaglic/R-ES.git'
+                    url = 'https://github.com/romannaglic/R-ES'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            // change URLs to point to your repos, e.g. http://my.org/repo
+            def releasesRepoUrl = layout.buildDirectory.dir('repos/releases')
+            def snapshotsRepoUrl = layout.buildDirectory.dir('repos/snapshots')
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+        }
+    }
+}
+
+//signing {
+//    sign publishing.publications.mavenJava
+//}
+
+
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
     }
 }
 
