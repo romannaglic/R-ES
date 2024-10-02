@@ -1,11 +1,11 @@
 plugins {
   id("com.github.johnrengelman.shadow") version "8.1.1"
-  id("io.micronaut.application") version "4.0.3"
-  id("io.micronaut.aot") version "4.0.3"
+  id("io.micronaut.application") version "4.4.2"
+  id("io.micronaut.aot") version "4.4.2"
 }
 
 version = "0.1"
-group = "com.r.es.demo"
+group = "com.axer.es.demo"
 
 repositories {
   mavenCentral()
@@ -20,10 +20,9 @@ dependencies {
   implementation("io.micronaut.sql:micronaut-hibernate-jpa")
   implementation("io.micronaut.sql:micronaut-jdbc-hikari")
   implementation("io.micronaut:micronaut-jackson-databind")
-  implementation("com.github.f4b6a3:tsid-creator:5.2.4")
+  implementation("com.github.f4b6a3:tsid-creator:5.2.6")
   implementation("io.micronaut:micronaut-inject-java")
 
-  implementation project(":es-components")
   implementation project(":es-data-jpa")
 
   runtimeOnly("ch.qos.logback:logback-classic")
@@ -37,11 +36,11 @@ dependencies {
 }
 
 application {
-  mainClass.set("com.r.es.demo.Application")
+  mainClass.set("com.axer.es.demo.Application")
 }
 java {
-  sourceCompatibility = JavaVersion.toVersion("17")
-  targetCompatibility = JavaVersion.toVersion("17")
+  sourceCompatibility = JavaVersion.toVersion("21")
+  targetCompatibility = JavaVersion.toVersion("21")
 }
 
 graalvmNative.toolchainDetection = false
@@ -50,7 +49,7 @@ micronaut {
   testRuntime("junit5")
   processing {
     incremental(true)
-    annotations("com.r.*")
+    annotations("com.axer.*")
   }
   aot {
     // Please review carefully the optimizations enabled below

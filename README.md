@@ -17,9 +17,22 @@ This framework provides the tools and abstractions for developing event-sourced 
 * **Event store:** A persistent repository for storing events.
 * **Event projectors:** Classes that transform event streams into different views of the system state.
 
+### Build
+
+In the root project folder execute the following commands:
+
+```bash
+./gradlew clean build publishToMavenLocal
+```
+
+Now the EvenSourcing framework is ready to be used.
+
+
+
 ### Examples
 
 The framework includes a number of examples that illustrate how to use the framework to build event-sourced applications. These examples cover a variety of use cases, including:
 
 * **Account demo:** Execute tests in DefaultApplicationServiceTest in account-demo module
 * **Bank demo:** Execute test in bank-demo module
+* **Minimal demo:** Template application in minimal-demo module
